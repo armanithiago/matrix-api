@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Execute returns the print of the matrix exactly as it is
+// Execute returns the matrix as a string in matrix format
 func Execute(m [][]int) (s string) {
 	var result string
 	for _, row := range m {
