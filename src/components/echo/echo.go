@@ -7,10 +7,13 @@ import (
 
 // Execute returns the matrix as a string in matrix format
 func Execute(m [][]int) (s string) {
-	var result string
+	var result = ""
 	for _, row := range m {
+		if result != "" {
+			result += "\n"
+		}
 		strRow := strings.Trim(strings.Join(strings.Split(fmt.Sprint(row), " "), ","), "[]")
-		result = fmt.Sprintf("%s%s\n", result, strRow)
+		result = fmt.Sprintf("%s%s", result, strRow)
 	}
 	return result
 }
