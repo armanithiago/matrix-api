@@ -15,6 +15,7 @@ func TestEcho(t *testing.T) {
 		{"2x2 Matrix", [][]int{{1, 2}, {3, 4}}, "1,2\n3,4"},
 		{"3x3 Matrix", [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "1,2,3\n4,5,6\n7,8,9"},
 		{"0x0 Matrix", [][]int{}, ""},
+		{"1x1 Matrix", [][]int{{1}}, "1"},
 		{"3x3 Matrix with negative values", [][]int{{1, -2, 3}, {4, 5, -6}, {-7, 8, 9}}, "1,-2,3\n4,5,-6\n-7,8,9"},
 	}
 
