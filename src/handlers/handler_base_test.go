@@ -1,24 +1,20 @@
 package handlers
 
 import (
-	"bytes"
 	"errors"
-	"io"
-	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"reflect"
 	"testing"
 )
 
-type requestTestCase struct {
-	name            string
-	fileName        string
-	convertedMatrix [][]int
-	method          string
-	err             error
-}
+//type requestTestCase struct {
+//	name            string
+//	fileName        string
+//	convertedMatrix [][]int
+//	method          string
+//	err             error
+//}
 
 type matrixConvertTestCase struct {
 	name            string
@@ -28,34 +24,18 @@ type matrixConvertTestCase struct {
 }
 
 func TestGetCsvFileFromRequest(t *testing.T) {
-	requestTestCases := []requestTestCase{
-		{"3x3 Matrix, 1 to 9", "../../assets/matrix_3x3.csv", [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "POST", nil},
-		{"3x3 Matrix, 0 to -8", "../../assets/matrix_3x3_negative.csv", [][]int{{0, -1, -2}, {-3, -4, -5}, {-6, -7, -8}}, "POST", nil},
-		{"2x3 Matrix, Non-Quadratic", "../../assets/matrix_2x3_non_quadratic.csv", nil, "POST", errors.New("invalid input. File should have same number of rows and columns")},
-		{"3x3 Matrix, Non-Integer Characters", "../../assets/matrix_3x3_non_integer_characters.csv", nil, "POST", errors.New("only integers allowed on input file")},
-		{"3x3 Matrix, Wrong Request Method", "../../assets/matrix_3x3.csv", nil, "GET", errors.New("method not allowed")},
+	requestTestCases := []RequestTestCase{
+		{"3x3 Matrix, 1 to 9", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3.csv", [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "", 0, nil},
+		{"3x3 Matrix, 0 to -8", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3_negative.csv", [][]int{{0, -1, -2}, {-3, -4, -5}, {-6, -7, -8}}, "", 0, nil},
+		{"2x3 Matrix, Non-Quadratic", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_2x3_non_quadratic.csv", nil, "", 0, errors.New(NOT_QUADRATIC)},
+		{"3x3 Matrix, Non-Integer Characters", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3_non_integer_characters.csv", nil, "", http.StatusBadRequest, errors.New(INVALID_CHARACTERS)},
+		{"3x3 Matrix, Wrong Request Method", "GET", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3.csv", nil, "", 0, errors.New(NOT_ALLOWED)},
+		{"No attachment request", "POST", "mock/test/getCsvFileFromRequest", false, "", nil, "", 0, errors.New(INVALID_INPUT_TYPE)},
 	}
 
 	for _, testCase := range requestTestCases {
-		t.Run(testCase.name, func(t *testing.T) {
-			file, _ := os.Open("../testfiles/" + testCase.fileName)
-			defer file.Close()
-
-			var requestBody bytes.Buffer
-			multipartWriter := multipart.NewWriter(&requestBody)
-			fileWriter, err := multipartWriter.CreateFormFile("file", testCase.fileName)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			_, err = io.Copy(fileWriter, file)
-			if err != nil {
-				t.Fatal(err)
-			}
-			multipartWriter.Close()
-
-			request, err := http.NewRequest(testCase.method, "mock/test/getCsvFileFromRequest", &requestBody)
-			request.Header.Set("Content-Type", multipartWriter.FormDataContentType())
+		t.Run(testCase.Name, func(t *testing.T) {
+			request, err := BuildRequest(testCase)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -63,11 +43,11 @@ func TestGetCsvFileFromRequest(t *testing.T) {
 			rr := httptest.NewRecorder()
 			m, err := GetCsvFileFromRequest(rr, request)
 
-			if reflect.DeepEqual(err, testCase.err) == false {
-				t.Fatalf("Got Error %v, Expected %v", err, testCase.err)
+			if reflect.DeepEqual(err, testCase.Err) == false {
+				t.Fatalf("Got Error %v, Expected %v", err, testCase.Err)
 			}
-			if reflect.DeepEqual(m, testCase.convertedMatrix) == false {
-				t.Fatalf("Got Matrix %v, Expected %v", m, testCase.convertedMatrix)
+			if reflect.DeepEqual(m, testCase.ConvertedMatrix) == false {
+				t.Fatalf("Got Matrix %v, Expected %v", m, testCase.ConvertedMatrix)
 			}
 		})
 	}
