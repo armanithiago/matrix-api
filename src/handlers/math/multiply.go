@@ -12,7 +12,7 @@ func Multiply(w http.ResponseWriter, r *http.Request) {
 	records, err := handlers.GetCsvFileFromRequest(w, r)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(fmt.Sprintf("error %s", err.Error())))
+		w.Write([]byte(fmt.Sprintf("Error: %s", err.Error())))
 		return
 	}
 	fmt.Fprint(w, multiply.Execute(records))

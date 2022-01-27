@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/csv"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -15,13 +14,11 @@ func GetCsvFileFromRequest(w http.ResponseWriter, r *http.Request) ([][]int, err
 	}
 	file, _, err := r.FormFile("file")
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("error %s", err.Error())))
 		return nil, errors.New(INVALID_INPUT_TYPE)
 	}
 	defer file.Close()
 	records, err := csv.NewReader(file).ReadAll()
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("error %s", err.Error())))
 		return nil, err
 	}
 	if len(records) <= 1 {
@@ -29,7 +26,7 @@ func GetCsvFileFromRequest(w http.ResponseWriter, r *http.Request) ([][]int, err
 	}
 
 	if len(records) != len(records[0]) {
-		return nil, errors.New("NOT_QUADRATIC")
+		return nil, errors.New(NOT_QUADRATIC)
 	}
 
 	intMatrix, err := convertMatrixToInt(records)
@@ -55,14 +52,5 @@ func convertMatrixToInt(m [][]string) ([][]int, error) {
 		}
 		converted = append(converted, intRow)
 	}
-
-	if len(converted) != len(converted[0]) {
-		return nil, errors.New(NOT_QUADRATIC)
-	}
-
-	if len(converted) == 0 {
-		return nil, errors.New(INVALID_SIZE)
-	}
-
 	return converted, nil
 }
