@@ -6,7 +6,7 @@
 ##### Steps:
 - Clone the repository
 - Open the console
-- Go to the projects root folder 
+- Go to the project ``src`` folder 
 - Enter the command below
 ```
 go run .
