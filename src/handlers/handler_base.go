@@ -8,7 +8,7 @@ import (
 )
 
 // GetCsvFileFromRequest receive a request and get the file csv attach to it
-func GetCsvFileFromRequest(w http.ResponseWriter, r *http.Request) ([][]int, error) {
+func GetCsvFileFromRequest(w http.ResponseWriter, r *http.Request) ([][]int64, error) {
 	if r.Method != http.MethodPost {
 		return nil, errors.New(NOT_ALLOWED)
 	}
@@ -38,13 +38,13 @@ func GetCsvFileFromRequest(w http.ResponseWriter, r *http.Request) ([][]int, err
 }
 
 //	private convert method responsible to get a string matrix and convert it to int matrix
-func convertMatrixToInt(m [][]string) ([][]int, error) {
-	var converted [][]int
+func convertMatrixToInt(m [][]string) ([][]int64, error) {
+	var converted [][]int64
 
 	for _, row := range m {
-		var intRow []int
+		var intRow []int64
 		for _, column := range row {
-			num, err := strconv.Atoi(column)
+			num, err := strconv.ParseInt(column, 10, 64)
 			if err != nil {
 				return nil, errors.New(INVALID_CHARACTERS)
 			}
