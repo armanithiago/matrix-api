@@ -8,7 +8,7 @@ import (
 // Run with
 //		go run .
 // Send request with:
-//		curl -F 'file=@/path/matrix.csv' "localhost:8080/echo"
+//		curl -F 'file=@/path/matrix_3x3.csv' "localhost:8080/echo"
 func main() {
 	routes.Configure()
 	http.ListenAndServe(":8080", nil)
