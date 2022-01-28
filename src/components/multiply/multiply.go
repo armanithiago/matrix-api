@@ -1,6 +1,7 @@
 package multiply
 
-func Execute(m [][]int64) (s int64) {
+// Execute returns the product of the integers in the matrix
+func Execute(m [][]int) (s int) {
 	if len(m) == 0 {
 		return 0
 	}
