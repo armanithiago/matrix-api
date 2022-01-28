@@ -6,7 +6,7 @@ import (
 )
 
 // Execute returns the matrix as a 1 line string, with values separated by commas.
-func Execute(m [][]int) (s string) {
+func Execute(m [][]int64) (s string) {
 	var result = ""
 	for _, row := range m {
 		if result != "" {

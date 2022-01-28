@@ -14,7 +14,7 @@ type RequestTestCase struct {
 	Url             string
 	HasAttachment   bool
 	FileName        string
-	ConvertedMatrix [][]int
+	ConvertedMatrix [][]int64
 	ExpectedResult  string
 	ExpectedStatus  int
 	Err             error

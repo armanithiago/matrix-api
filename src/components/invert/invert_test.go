@@ -6,17 +6,17 @@ import (
 
 type testCase struct {
 	name     string
-	input    [][]int
+	input    [][]int64
 	expected string
 }
 
 func TestInvert(t *testing.T) {
 	var testCases = []testCase{
-		{"2x2 Matrix", [][]int{{1, 2}, {3, 4}}, "1,3\n2,4"},
-		{"3x3 Matrix", [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "1,4,7\n2,5,8\n3,6,9"},
-		{"0x0 Matrix", [][]int{}, ""},
-		{"1x1 Matrix", [][]int{{1}}, "1"},
-		{"3x3 Matrix with negative values", [][]int{{1, -2, 3}, {4, 5, -6}, {-7, 8, 9}}, "1,4,-7\n-2,5,8\n3,-6,9"},
+		{"2x2 Matrix", [][]int64{{1, 2}, {3, 4}}, "1,3\n2,4"},
+		{"3x3 Matrix", [][]int64{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "1,4,7\n2,5,8\n3,6,9"},
+		{"0x0 Matrix", [][]int64{}, ""},
+		{"1x1 Matrix", [][]int64{{1}}, "1"},
+		{"3x3 Matrix with negative values", [][]int64{{1, -2, 3}, {4, 5, -6}, {-7, 8, 9}}, "1,4,-7\n-2,5,8\n3,-6,9"},
 	}
 
 	for _, test := range testCases {

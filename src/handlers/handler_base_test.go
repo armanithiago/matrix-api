@@ -19,14 +19,14 @@ import (
 type matrixConvertTestCase struct {
 	name            string
 	strMatrix       [][]string
-	convertedMatrix [][]int
+	convertedMatrix [][]int64
 	err             error
 }
 
 func TestGetCsvFileFromRequest(t *testing.T) {
 	requestTestCases := []RequestTestCase{
-		{"3x3 Matrix, 1 to 9", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3.csv", [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "", 0, nil},
-		{"3x3 Matrix, 0 to -8", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3_negative.csv", [][]int{{0, -1, -2}, {-3, -4, -5}, {-6, -7, -8}}, "", 0, nil},
+		{"3x3 Matrix, 1 to 9", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3.csv", [][]int64{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, "", 0, nil},
+		{"3x3 Matrix, 0 to -8", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3_negative.csv", [][]int64{{0, -1, -2}, {-3, -4, -5}, {-6, -7, -8}}, "", 0, nil},
 		{"2x3 Matrix, Non-Quadratic", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_2x3_non_quadratic.csv", nil, "", 0, errors.New(NOT_QUADRATIC)},
 		{"3x3 Matrix, Non-Integer Characters", "POST", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3_non_integer_characters.csv", nil, "", http.StatusBadRequest, errors.New(INVALID_CHARACTERS)},
 		{"3x3 Matrix, Wrong Request Method", "GET", "mock/test/getCsvFileFromRequest", true, "../../assets/matrix_3x3.csv", nil, "", 0, errors.New(NOT_ALLOWED)},
@@ -55,10 +55,10 @@ func TestGetCsvFileFromRequest(t *testing.T) {
 
 func TestConvertMatrixToInt(t *testing.T) {
 	matrixConvertTestCases := []matrixConvertTestCase{
-		{"2x2 Matrix", [][]string{{"1", "2"}, {"3", "4"}}, [][]int{{1, 2}, {3, 4}}, nil},
-		{"3x3 Matrix", [][]string{{"1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9"}}, [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, nil},
-		{"2x3 Matrix", [][]string{{"1", "2", "3"}, {"4", "5", "6"}}, [][]int{{1, 2, 3}, {4, 5, 6}}, nil},
-		{"3x3 Matrix, 0 to -8", [][]string{{"0", "-1", "-2"}, {"-3", "-4", "-5"}, {"-6", "-7", "-8"}}, [][]int{{0, -1, -2}, {-3, -4, -5}, {-6, -7, -8}}, nil},
+		{"2x2 Matrix", [][]string{{"1", "2"}, {"3", "4"}}, [][]int64{{1, 2}, {3, 4}}, nil},
+		{"3x3 Matrix", [][]string{{"1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9"}}, [][]int64{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, nil},
+		{"2x3 Matrix", [][]string{{"1", "2", "3"}, {"4", "5", "6"}}, [][]int64{{1, 2, 3}, {4, 5, 6}}, nil},
+		{"3x3 Matrix, 0 to -8", [][]string{{"0", "-1", "-2"}, {"-3", "-4", "-5"}, {"-6", "-7", "-8"}}, [][]int64{{0, -1, -2}, {-3, -4, -5}, {-6, -7, -8}}, nil},
 		{"2x2 Matrix, Non-Integer Characters", [][]string{{"R", "q"}, {"$", "c"}}, nil, errors.New("only integers allowed on input file")},
 	}
 	for _, testCase := range matrixConvertTestCases {
